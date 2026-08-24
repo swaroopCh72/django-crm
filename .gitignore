@@ -1,0 +1,18 @@
+# venv
+/crmenv/
+
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore database files
+db.sqlite3      
+
+# Ignore media files
+/media/     
+
+# VS code
+.vscode/
+
+.env

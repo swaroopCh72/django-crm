@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% csrf_token %}
+    
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <h2 class="card-header">{{ customer_record.first_name }} {{ customer_record.last_name }}</h2>
+            <div class="card-body">
+                <p><strong>Email:</strong> {{ customer_record.email }}</p>
+                <p><strong>Phone Number:</strong> {{ customer_record.phone_number }}</p>
+                <p><strong>Address:</strong> {{ customer_record.address }}</p>
+                <p><strong>City:</strong> {{ customer_record.city }}</p>
+                <p><strong>Zip Code:</strong> {{ customer_record.zip_code }}</p>
+                <p><strong>State:</strong> {{ customer_record.state }}</p>
+                <p><strong>Country:</strong> {{ customer_record.country }}</p>
+                <p><strong>Date Created:</strong> {{ customer_record.date_created }}</p>
+            </div>
+        </div>
+        <br/>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+        <a href="{% url 'delete_record' pk=customer_record.id %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'update_record' pk=customer_record.id %}" class="btn btn-success">Update</a>
+    </div>
+
+{% endblock %}
