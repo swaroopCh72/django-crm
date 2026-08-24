@@ -10,19 +10,23 @@ pipeline {
 
         stage('Django Checks') {
             steps {
-                sh 'python manage.py check'
+                dir('CRMProject') {
+                    sh 'python manage.py check'
+                }
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'python manage.py test'
+                dir('CRMProject') {
+                    sh 'python manage.py test'
+                }
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t crm-django:latest .'
+                sh 'docker build -t django-crm:latest .'
             }
         }
     }
