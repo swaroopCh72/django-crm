@@ -4,11 +4,9 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                sh '''
-                    python3 -m venv .venv
-                    .venv/bin/pip install --upgrade pip
-                    .venv/bin/pip install -r requirements.txt
-                '''
+                sh 'python3 -m venv .venv'
+                sh '.venv/bin/pip install --upgrade pip'
+                sh '.venv/bin/pip install -r requirements.txt'
             }
         }
 
@@ -23,7 +21,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 dir('CRMProject') {
-                    sh '../.venv/bin/python manage.py test
+                    sh '../.venv/bin/python manage.py test'
                 }
             }
         }
