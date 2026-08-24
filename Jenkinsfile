@@ -4,14 +4,18 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r requirements.txt'
+                sh '''
+                    python3 -m venv .venv
+                    .venv/bin/pip install --upgrade pip
+                    .venv/bin/pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Django Checks') {
             steps {
                 dir('CRMProject') {
-                    sh 'python manage.py check'
+                    sh '../.venv/bin/python manage.py check'
                 }
             }
         }
@@ -19,7 +23,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 dir('CRMProject') {
-                    sh 'python manage.py test'
+                    sh '../.venv/bin/python manage.py test
                 }
             }
         }
