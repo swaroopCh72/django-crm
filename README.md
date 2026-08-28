@@ -1,111 +1,212 @@
 # Django CRM System
 
-A simple Customer Relationship Management (CRM) web application built using Django.
+A Django-based Customer Relationship Management (CRM) application for managing customer records through a simple authenticated web interface.
 
-The application allows authenticated users to manage customer records with complete CRUD functionality.
+The project demonstrates backend development with Django along with containerization and a basic CI pipeline using Jenkins.
 
 ## Features
 
-- User Registration and Login
-- Session-based Authentication
-- Add Customer Records
-- View Customer Details
-- Update Existing Records
-- Delete Records
-- Form Validation
-- Protected Routes for Authorized Users
-- Bootstrap-based Responsive UI
-- Dockerized Development Setup
-
----
+- User registration and login
+- Session-based authentication
+- Protected CRM routes
+- Add customer records
+- View customer records
+- Update customer records
+- Delete customer records
+- Form validation
+- Bootstrap-based responsive UI
+- SQLite database
+- Dockerized application
+- Persistent SQLite data using Docker volumes
+- Jenkins CI pipeline
+- GitHub webhook integration
 
 ## Tech Stack
 
 - Python
 - Django
 - SQLite
-- Bootstrap
 - HTML/CSS
+- Bootstrap
 - Docker
-
----
+- Jenkins
+- Git/GitHub
+- ngrok
 
 ## Project Structure
 
-```bash
-django-crm-system/
+```
+django-crm/
 │
-├── crm/
-├── website/
-├── templates/
-├── static/
-├── manage.py
-├── requirements.txt
+├── CRMProject/
+│   ├── CRMApp/
+│   │   ├── migrations/
+│   │   ├── templates/
+│   │   ├── forms.py
+│   │   ├── models.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   │
+│   ├── CRMProject/
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   ├── asgi.py
+│   │   └── wsgi.py
+│   │
+│   ├── data/
+│   │   └── db.sqlite3
+│   │
+│   └── manage.py
+│
+├── .gitignore
+├── .dockerignore
+├── .env
 ├── Dockerfile
-└── db.sqlite3
+├── Jenkinsfile
+├── README.md
+└── requirements.txt
 ```
 
----
-
-## Installation
+## Local Setup
 
 ### Clone the Repository
 
 ```bash
-git clone <https://github.com/your-username/django-crm-system.git>
-cd django-crm-system
+git clone https://github.com/swaroopCh72/django-crm.git
+cd django-crm
 ```
 
 ### Create Virtual Environment
 
 ```bash
-python -m venv venv
+python3 -m venv crmenv
 ```
 
 ### Activate Virtual Environment
 
-### Linux/macOS
+#### Linux/macOS
 
 ```bash
-source venv/bin/activate
+source crmenv/bin/activate
 ```
 
-### Windows
+#### Windows
 
 ```bash
-venv\\Scripts\\activate
+crmenv\Scripts\activate
 ```
 
----
-
-## Install Dependencies
+### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
----
+### Configure Environment Variables
 
-## Run Migrations
+Create a `.env` file in the project root:
+
+```
+DJANGO_SECRET_KEY=your-secret-key
+```
+
+The secret key is intentionally kept outside version control.
+
+### Run Migrations
 
 ```bash
+cd CRMProject
 python manage.py migrate
 ```
 
----
-
-## Start Development Server
+### Start Development Server
 
 ```bash
 python manage.py runserver
 ```
 
-Open browser and visit:
+Open:
 
-```bash
-<http://127.0.0.1:8000/>
+```
+http://127.0.0.1:8000/
 ```
 
-Testing webhooks T1
+## Docker
 
-Mounting Docker Volume Test T2
+Build the Docker image:
+
+```bash
+docker build -t django-crm:latest .
+```
+
+Run the application:
+
+```bash
+docker run --rm \
+  --env-file .env \
+  -p 8000:8000 \
+  django-crm:latest
+```
+
+## Persistent Database with Docker Volume
+
+The SQLite database is stored separately from the Docker image using a named volume.
+
+Create the volume:
+
+```bash
+docker volume create django_crm_data
+```
+
+Run the application with the persistent volume:
+
+```bash
+docker run --rm \
+  --env-file .env \
+  -p 8000:8000 \
+  -v django_crm_data:/app/CRMProject/data \
+  django-crm:latest
+```
+
+The database persists even when the container is removed and recreated.
+
+## CI Pipeline
+
+Jenkins is configured to automatically build the project when changes are pushed to GitHub.
+
+The pipeline performs:
+
+1. Checkout source code
+2. Create an isolated Python virtual environment
+3. Install project dependencies
+4. Run Django system checks
+5. Run Django tests
+6. Build the Docker image
+
+### CI Workflow
+
+```
+Git Push
+   │
+   ▼
+GitHub
+   │
+   │ Webhook
+   ▼
+ngrok
+   │
+   ▼
+Jenkins
+   │
+   ├── Install Dependencies
+   ├── Django Checks
+   ├── Run Tests
+   └── Docker Build
+           │
+           ▼
+     django-crm:latest
+```
+
+## License
+
+This project is for learning and portfolio purposes.
